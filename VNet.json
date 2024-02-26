@@ -1,0 +1,60 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "VName": {
+          "type": "string",
+          "defaultValue" : "VNet" ,
+          "metadata": {
+            "description": "Virtual Network Name"
+          } 
+        },
+        "Prefix": {
+            "type": "string",
+            "defaultValue" : "10.0." ,
+            "metadata" : {
+              "description" : "Prefix Ip (ex : 10.0. )"
+            }
+          }
+    },
+    "variables": {
+      "addressPrefixes" : "[concat(parameters('Prefix'),'0.0')]" ,
+      "addressPrefix" :"[concat(parameters('Prefix'),'{0}.0/24')]" 
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Network/virtualNetworks",
+            "apiVersion": "2020-06-01",
+            "name": "[parameters('VName')]",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [ "[concat(variables('addressPrefixes'),'/20')]" ]
+                },
+                "copy" : [
+                  {
+                    "name" : "subnets",
+                    "count" : 2 ,
+                    "input" : {
+                        "name": "[format('Subnet{0}',copyindex('subnets'))]",
+                        "properties": {
+                          "addressPrefix": "[format(variables('addressPrefix'),copyindex('subnets'))]"
+                        }
+                      }
+                    }
+                  ]
+                
+            }
+        }
+    ],
+    "outputs": {
+      "addressPrefix": {
+        "type": "string",
+        "value":  "[variables('addressPrefix')]"
+      },
+      "addressPrefixes": {
+        "type": "string",
+        "value":  "[variables('addressPrefixes')]"
+      }
+    }
+}
