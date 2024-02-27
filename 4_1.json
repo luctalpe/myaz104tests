@@ -13,7 +13,7 @@
     "functions": [],
     "variables": {
         "githubpath" : "[parameters('github')]" ,
-        "lab1_vnetpath" : "[concat( variables('githubpath') , 'lab1_VNet.json')]"
+        "lab1_vnetpath" : "[concat( variables('githubpath') , 'Lab1_VNet.json')]"
 
     },
     "resources": [
