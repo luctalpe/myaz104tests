@@ -50,7 +50,7 @@
         {
             "type": "Microsoft.Network/networkInterfaces",
             "apiVersion": "2021-02-01",
-            "name": "[concat(format('{0}{1}{2}{3}', parameters('vmsconfig').vmPrefix, copyIndex('netIntCopy'),parameters('vmsconfig').VNetName,parameters('vmsconfig').SubnetName), 'NetInt')]",
+            "name": "[concat(format('{0}{1}{2}{3}', parameters('vmsconfig').vmPrefix, copyIndex(),parameters('vmsconfig').VNetName,parameters('vmsconfig').SubnetName), 'NetInt')]",
             "location": "[resourceGroup().location]",
             "copy": {
                 "name": "netIntCopy",
