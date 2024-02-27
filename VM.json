@@ -17,24 +17,7 @@
             }
         },
 
-        "vmPrefix": {
-            "type": "string",
-            "defaultValue": "VM"
-        },
-        "VNetName": {
-            "type": "string",
-            "defaultValue": "VNet1"
-        },
-  
-    
-        "VmCount" : {
-            "type": "int" ,
-            "defaultValue": 1
-        },
-        "SubnetName" : {
-            "type": "string",
-            "defaultValue": "Subnet1"
-        },
+        
         "adminPassword" : {
             "type" : "securestring"
 
