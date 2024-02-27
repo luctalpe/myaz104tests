@@ -39,6 +39,12 @@
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
+                    "vmsconfig": {
+                        "vmPrefix": "[variables('VMSConfig')[copyIndex()].vmPrefix]",  
+                        "VNetName": "[variables('VMSConfig')[copyIndex()].VNetName]", 
+                        "VmCount" : "[variables('VMSConfig')[copyIndex()].VmCount]" , 
+                        "SubnetName": "[variables('VMSConfig')[copyIndex()].SubnetName]"   
+                    },
                     "adminPassword": {
                         "value": "[parameters('password')]" // TODO: Fill in parameter value
                     }
