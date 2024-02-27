@@ -93,6 +93,12 @@
                 }
             }
         }
-    ]
+    ],
+    "outputs": {
+        "param": {
+            "type": "object",
+            "value": "[parameters('vmsconfig')]"
+        }
+    }
 }
 
