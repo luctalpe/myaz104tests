@@ -46,7 +46,7 @@
                         "SubnetName": "[variables('VMSConfig')[copyIndex()].SubnetName]"   
                     },
                     "adminPassword": {
-                        "value": "[parameters('password')]" // TODO: Fill in parameter value
+                        "value": "[parameters('password')]" 
                     }
                 }
             }
