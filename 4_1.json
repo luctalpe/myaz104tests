@@ -1,27 +1,37 @@
 {
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
-    "parameters": {},
+    "parameters": {
+        "github": {
+            "type": "string",
+            "metadata": {
+                "description": "description"
+            },
+            "defaultValue" :  "https://raw.githubusercontent.com/luctalpe/myaz104tests/main/" 
+        }
+    },
     "functions": [],
-    "variables": {},
+    "variables": {
+        "githubpath" : "[parameters('github')]" ,
+        "lab1_vnetpath" : "[concat( variables('githubpath') , 'lab1_VNet.json')]"
+
+    },
     "resources": [
         {
-            "name": "linkedDeployment1",
+            "name": "lab1_vnetpath",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2022-09-01",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[concat('artifactsLocation', '/linkedTemplates/linkedTemplate.json', 'artifactsLocationSasToken')]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "parameter1": {
-                        "value": "value"
-                    }
-                }
+                    "uri":"[variables('lab1_vnetpath')]",
+                    "contentVersion":"1.0.0.0"
+                } ,
+
             }
         }
+
+
     ],
     "outputs": {}
 }
