@@ -31,7 +31,7 @@
                 "batchSize": 1
 
             },
-            "name": "[concat('VMS', copyIndex('vmscopy'))]",
+            "name": "[concat('VMS', copyIndex())]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2022-09-01",
             "properties": {
@@ -43,10 +43,10 @@
                 },
                 "parameters": {
                     "vmsconfig": {
-                        "vmPrefix": "[variables('VMSConfig')[copyIndex('vmscopy')].vmPrefix]",  
-                        "VNetName": "[variables('VMSConfig')[copyIndex('vmscopy')].VNetName]", 
-                        "VmCount" : "[variables('VMSConfig')[copyIndex('vmscopy')].VmCount]" , 
-                        "SubnetName": "[variables('VMSConfig')[copyIndex('vmscopy')].SubnetName]"   
+                        "vmPrefix": "[variables('VMSConfig')[copyIndex()].vmPrefix]",  
+                        "VNetName": "[variables('VMSConfig')[copyIndex()].VNetName]", 
+                        "VmCount" : "[variables('VMSConfig')[copyIndex()].VmCount]" , 
+                        "SubnetName": "[variables('VMSConfig')[copyIndex()].SubnetName]"   
                     },
                     "adminPassword": {
                         "value": "[parameters('password')]" 
