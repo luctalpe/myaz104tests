@@ -61,7 +61,7 @@
           },
           "properties": {
             "virtualNetwork": {
-              "id": "[parameters('virtualNetworks_VHub_externalid')]"
+              "id": "[resourceId('Microsoft.Network/virtualNetworks',parameters('VName'))]"
             }
           }
         }
