@@ -25,10 +25,7 @@
         {
             "copy": {
                 "name"  : "vmscopy" ,
-                "count" : "[length(variables('VMSConfig'))]",
-                "mode" : "Serial",
-                "batchSize": 1
-
+                "count" : "[length(variables('VMSConfig'))]"
             },
             "name": "[concat('VMS', copyIndex())]",
             "type": "Microsoft.Resources/deployments",
