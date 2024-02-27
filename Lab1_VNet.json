@@ -4,9 +4,6 @@
     "parameters": {
         "github": {
             "type": "string",
-            "metadata": {
-                "description": "description"
-            },
             "defaultValue": "https://raw.githubusercontent.com/luctalpe/myaz104tests/main/"
         }
     },

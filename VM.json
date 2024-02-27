@@ -3,6 +3,19 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         
+        "vmsconfig": {
+            "type": "object",
+            "metadata": {
+                "description": "description"
+            },
+            "defaultValue" : {
+                "vmPrefix": "VM",
+                "VNetName": "VNet1",
+                "VmCount" : 1 ,
+                "SubnetName": "Subnet1"
+
+            }
+        },
 
         "vmPrefix": {
             "type": "string",
@@ -23,7 +36,7 @@
             "defaultValue": "Subnet1"
         },
         "adminPassword" : {
-            "type" : "securestring",
+            "type" : "securestring"
 
         }
 
@@ -37,13 +50,13 @@
         {
             "type": "Microsoft.Network/networkInterfaces",
             "apiVersion": "2021-02-01",
-            "name": "[concat(format('{0}{1}{2}{3}', parameters('vmPrefix'), copyIndex('netIntCopy'),parameters('VNetName'),parameters('SubnetName')), 'NetInt')]",
+            "name": "[concat(format('{0}{1}{2}{3}', parameters('vmsconfig').vmPrefix, copyIndex('netIntCopy'),parameters('vmsconfig').VNetName,parameters('vmsconfig').SubnetName), 'NetInt')]",
             "location": "[resourceGroup().location]",
             "copy": {
                 "name": "netIntCopy",
-                "count": "[parameters('VmCount')]"
+                "count": "[parameters('vmsconfig').VmCount]"
             },
-            "dependsOn" : [ "[concat( 'Microsoft.Network/virtualNetworks/subnets', parameters('vnetName'), parameters('SubnetName')) ]" ], 
+            "dependsOn" : [ "[concat( 'Microsoft.Network/virtualNetworks/subnets/', parameters('vmsconfig').vnetName, parameters('vmsconfig').SubnetName) ]" ], 
             "properties": {
                 "ipConfigurations": [
                     {
@@ -51,7 +64,7 @@
                         "properties": {
                             "privateIPAllocationMethod": "Dynamic",
                             "subnet": {
-                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnetName'), parameters('SubnetName'))]"
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vmsconfig').VNetName, parameters('vmsconfig').SubnetName)]"
                             }
                         }
                     }
@@ -61,19 +74,19 @@
         {
             "type": "Microsoft.Compute/virtualMachines",
             "apiVersion": "2021-07-01",
-            "name": "[format('{0}{1}{2}{3}', parameters('vmPrefix'), copyIndex(),parameters('VNetName'),parameters('SubnetName'))]",
+            "name": "[format('{0}{1}{2}{3}', parameters('vmsconfig').vmPrefix, copyIndex(),parameters('vmsconfig').VNetName,parameters('vmsconfig').SubnetName)]",
             "location": "[resourceGroup().location]",
             "copy": {
                 "name": "vmCopy",
-                "count": "[parameters('VmCount')]"
+                "count": "[parameters('vmsconfig').VmCount]"
             },
-            "dependsOn" : [ "[concat(format('Microsoft.Network/networkInterfaces/{0}{1}{2}{3}', parameters('vmPrefix'), copyIndex(),parameters('VNetName'),parameters('SubnetName')), 'NetInt')]" ],
+            "dependsOn" : [ "[concat(format('Microsoft.Network/networkInterfaces/{0}{1}{2}{3}', parameters('vmsconfig').vmPrefix, copyIndex(),parameters('vmsconfig').VNetName,parameters('vmsconfig').SubnetName), 'NetInt')]" ],
             "properties": {
                 "hardwareProfile": {
                     "vmSize": "Standard_DS1_v2"
                 },
                 "osProfile": {
-                    "computerName":  "[format('{0}{1}{2}{3}', parameters('vmPrefix'), copyIndex(),parameters('VNetName'),parameters('SubnetName'))]",
+                    "computerName":  "[format('{0}{1}{2}{3}', parameters('vmsconfig').vmPrefix, copyIndex(),parameters('vmsconfig').VNetName,parameters('vmsconfig').SubnetName)]",
                     "adminUsername": "[variables('adminUsername')]",
                     "adminPassword": "[parameters('adminPassword')]"
                 },
@@ -88,7 +101,7 @@
                 "networkProfile": {
                     "networkInterfaces": [
                         {
-                            "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(format('{0}{1}{2}{3}', parameters('vmPrefix'), copyIndex(),parameters('VNetName'),parameters('SubnetName')), 'NetInt'))]"
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(format('{0}{1}{2}{3}', parameters('vmsconfig').vmPrefix, copyIndex(),parameters('vmsconfig').VNetName,parameters('vmsconfig').SubnetName), 'NetInt'))]"
                         }
                     ]
                 }

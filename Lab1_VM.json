@@ -1,0 +1,50 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "github": {
+            "type": "string",
+            "defaultValue": "https://raw.githubusercontent.com/luctalpe/myaz104tests/main/"
+        },
+        "password": {
+            "type": "securestring",
+            "defaultValue" : "LS1Setup!310"
+        }
+    },
+    "functions": [],
+    "variables": {
+        "githubpath" : "[parameters('github')]" ,
+        "vmpath" : "[concat( variables('githubpath') , 'VM.json')]",
+        "VMSConfig" : [
+            { "vmPrefix": "VM",  "VNetName": "VNet0", "VmCount" : 2 , "SubnetName": "Subnet0"           },
+            { "vmPrefix": "VM",  "VNetName": "VNet0", "VmCount" : 1 , "SubnetName": "Subnet1"           },
+            { "vmPrefix": "VM",  "VNetName": "VNet1", "VmCount" : 1 , "SubnetName": "Subnet0"           },
+            { "vmPrefix": "VM",  "VNetName": "VNetHub", "VmCount" : 1 , "SubnetName": "Subnet0"         },
+            
+        ]
+    },
+    "resources": [
+        {
+            "copy": {
+                "name"  : "vmscopy" ,
+                "count" : "[length(variables('VMSConfig'))]"
+            },
+            "name": "[concat('VMS', copyIndex())]",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2022-09-01",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('vmpath')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "adminPassword": {
+                        "value": "[parameters('password')]" // TODO: Fill in parameter value
+                    }
+                }
+            }
+        }
+    ],
+    "outputs": {}
+}
