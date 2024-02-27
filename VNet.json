@@ -15,7 +15,11 @@
             "metadata" : {
               "description" : "Prefix Ip (ex : 10.0. )"
             }
-          }
+          },
+        "Bastion": {
+          "type": "bool",
+          "defaultValue": true
+        }
     },
     "variables": {
       "addressPrefixes" : "[concat(parameters('Prefix'),'0.0')]" ,
@@ -45,6 +49,21 @@
                   ]
                 
             }
+        } ,
+        {
+          "type": "Microsoft.Network/bastionHosts",
+          "condition" : "[parameters('Bastion')]", 
+          "apiVersion": "2023-06-01",
+          "name": "[concat(parameters('VName'),'_Bastion')]",
+          "location": "[resourceGroup().location]",
+          "sku": {
+                "name": "Developer"
+          },
+          "properties": {
+            "virtualNetwork": {
+              "id": "[parameters('virtualNetworks_VHub_externalid')]"
+            }
+          }
         }
     ],
     "outputs": {
