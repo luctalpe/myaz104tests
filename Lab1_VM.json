@@ -7,8 +7,7 @@
             "defaultValue": "https://raw.githubusercontent.com/luctalpe/myaz104tests/main/"
         },
         "password": {
-            "type": "securestring",
-            "defaultValue" : "ddd"
+            "type": "securestring"
         }
     },
     "functions": [],
