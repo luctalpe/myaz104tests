@@ -16,10 +16,7 @@
         "githubpath" : "[parameters('github')]" ,
         "vmpath" : "[concat( variables('githubpath') , 'VM.json')]",
         "VMSConfig" : [
-            { "vmPrefix": "VM",  "VNetName": "VNet0", "VmCount" : 2 , "SubnetName": "Subnet0"           },
-            { "vmPrefix": "VM",  "VNetName": "VNet0", "VmCount" : 1 , "SubnetName": "Subnet1"           },
-            { "vmPrefix": "VM",  "VNetName": "VNet1", "VmCount" : 1 , "SubnetName": "Subnet0"           },
-            { "vmPrefix": "VM",  "VNetName": "VNetHub", "VmCount" : 1 , "SubnetName": "Subnet0"         },
+            { "vmPrefix": "VM",  "VNetName": "VNet0", "VmCount" : 1 , "SubnetName": "Subnet0"           }
             
         ]
     },
