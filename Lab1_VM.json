@@ -8,7 +8,7 @@
         },
         "password": {
             "type": "securestring",
-            "defaultValue" : "LS1Setup!310"
+            "defaultValue" : "ddd"
         }
     },
     "functions": [],

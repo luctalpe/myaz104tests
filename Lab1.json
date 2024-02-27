@@ -8,6 +8,9 @@
                 "description": "description"
             },
             "defaultValue" :  "https://raw.githubusercontent.com/luctalpe/myaz104tests/main/" 
+        },
+        "vmpass": {
+            "type": "securestring"
         }
     },
     "functions": [],
@@ -41,7 +44,12 @@
                 "templateLink": {
                     "uri":"[variables('lab1_vmpath')]",
                     "contentVersion":"1.0.0.0"
-                } 
+                } ,
+                "parameters": {
+                    "password": {
+                        "value": "[parameters('vmpass')]"
+                    }
+                }
 
             }
         }
