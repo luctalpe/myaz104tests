@@ -13,18 +13,33 @@
     "functions": [],
     "variables": {
         "githubpath" : "[parameters('github')]" ,
-        "lab1_vnetpath" : "[concat( variables('githubpath') , 'Lab1_VNet.json')]"
+        "lab1_vnetpath" : "[concat( variables('githubpath') , 'Lab1_VNet.json')]",
+        "lab1_vmpath": "[concat( variables('githubpath') , 'Lab1_VM.json')]"
 
     },
     "resources": [
         {
-            "name": "lab1_vnetpath",
+            "name": "lab1_vnet",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2022-09-01",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
                     "uri":"[variables('lab1_vnetpath')]",
+                    "contentVersion":"1.0.0.0"
+                } 
+
+            }
+        },
+        {
+            "name": "lab1_vm",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2022-09-01",
+            "dependsOn": [ "[resourceId('Microsoft.Resources/deployments', 'lab1_vnet')]" ], 
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri":"[variables('lab1_vmpath')]",
                     "contentVersion":"1.0.0.0"
                 } 
 
