@@ -75,10 +75,7 @@
       "addressPrefixes": {
         "type": "string",
         "value":  "[variables('addressPrefixes')]"
-      },
-      "NSG": {
-        "type": "object",
-        "value" : "[if(variables('isNoNSG'),json('null'),variables('RealNSG'))]"
       }
+
     }
 }
