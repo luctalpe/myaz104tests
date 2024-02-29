@@ -18,10 +18,31 @@
     "variables": {
         "githubpath" : "[parameters('github')]" ,
         "lab_vnetpath" : "[concat( variables('githubpath') , 'VNet_NSG.json')]",
-        "lab_vmpath": "[concat( variables('githubpath') , 'VM.json')]"
+        "lab_vmpath": "[concat( variables('githubpath') , 'VM.json')]", 
+        "lab_nsgpath": "[concat( variables('githubpath') , 'NSG_NoInternet.json')]",
+        "VMConfig" : [{ "vmPrefix": "S",  "VNetName": "VNet", "VmCount" : 1 , "SubnetName": "Subnet0"  }]
 
     },
     "resources": [
+                {
+            "name": "lab_nsg",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2022-09-01",
+            "dependsOn" : ["[resourceId('Microsoft.Resources/deployments', 'lab_vnet')]"],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri":"[variables('lab_nsgpath')]",
+                    "contentVersion":"1.0.0.0"
+                } ,
+                "parameters": {
+                    "NSG": {
+                        "value": "NSG_NoOutboundInternet"
+                    }
+                }
+
+            }
+        },
         {
             "name": "lab_vnet",
             "type": "Microsoft.Resources/deployments",
@@ -31,7 +52,16 @@
                 "templateLink": {
                     "uri":"[variables('lab_vnetpath')]",
                     "contentVersion":"1.0.0.0"
-                } 
+                } ,
+                "parameters": {
+                    "NSG": {
+                        "value": "NSG_NoOutboundInternet"
+                    },
+                    "Prefix": {
+                        "value": "10.8."
+                    }
+                }
+
 
             }
         },
@@ -49,6 +79,14 @@
                 "parameters": {
                     "password": {
                         "value": "[parameters('vmpass')]"
+                    },
+                    "vmsconfig": {
+                        "value" : {
+                            "vmPrefix": "[variables('VMConfig').vmPrefix]",  
+                            "VNetName": "[variables('VMSConfig').VNetName]", 
+                            "VmCount" : "[variables('VMSConfig').VmCount]" , 
+                            "SubnetName": "[variables('VMSConfig').SubnetName]"   
+                        }
                     }
                 }
 
