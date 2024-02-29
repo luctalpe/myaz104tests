@@ -4,11 +4,9 @@
     "parameters": {
         "DNSZone": {
             "type": "string",
-            "defaultValue" : "luct.fr"
         },
         "VNets": {
-            "type": "array",
-            "defaultValue": ["VNet"]        
+            "type": "array",     
         }
     },
     "functions": [],
