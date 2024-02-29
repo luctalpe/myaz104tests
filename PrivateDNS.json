@@ -6,7 +6,8 @@
             "type": "string"
         },
         "VNets": {
-            "type": "array"    
+            "type": "array" ,
+            "defaultValue" : [ "VNet0","VNet1", "VHub"]  
         }
     },
     "functions": [],
