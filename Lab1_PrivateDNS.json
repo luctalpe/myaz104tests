@@ -25,8 +25,13 @@
                     "contentVersion":"1.0.0.0"
                 } ,
                 "parameters": {
-                    "DNSZone": "luct.fr",
-                    "VNets": [ "VHub", "VNet0", "VNet1"]
+                    "VNets":  { 
+                        "value: " : ["VHub", "VNet0", "VNet1"] 
+                    },
+                    "DNSZone": {
+                        "value":  "luct.fr"
+                    }
+
                 }
             }
         }
