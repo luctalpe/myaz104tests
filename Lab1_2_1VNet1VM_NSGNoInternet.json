@@ -20,7 +20,7 @@
         "lab_vnetpath" : "[concat( variables('githubpath') , 'VNet_NSG.json')]",
         "lab_vmpath": "[concat( variables('githubpath') , 'VM.json')]", 
         "lab_nsgpath": "[concat( variables('githubpath') , 'NSG_NoInternet.json')]",
-        "VMConfig" : [{ "vmPrefix": "S",  "VNetName": "VNet", "VmCount" : 1 , "SubnetName": "Subnet0"  }]
+        "VMConfig" : { "vmPrefix": "S",  "VNetName": "VNet", "VmCount" : 1 , "SubnetName": "Subnet0"  }
 
     },
     "resources": [
@@ -76,7 +76,7 @@
                         "value": "[parameters('vmpass')]"
                     },
                     "vmsconfig": {
-                        "value" : {
+                        "value" : [{
                             "vmPrefix": "[variables('VMConfig').vmPrefix]",  
                             "VNetName": "[variables('VMConfig').VNetName]", 
                             "VmCount" : "[variables('VMConfig').VmCount]" , 
