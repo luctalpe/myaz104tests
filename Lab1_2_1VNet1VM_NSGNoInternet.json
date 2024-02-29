@@ -34,12 +34,7 @@
                 "templateLink": {
                     "uri":"[variables('lab_nsgpath')]",
                     "contentVersion":"1.0.0.0"
-                } ,
-                "parameters": {
-                    "NSG": {
-                        "value": "NSG_NoOutboundInternet"
-                    }
-                }
+                } 
 
             }
         },
