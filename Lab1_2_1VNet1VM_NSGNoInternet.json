@@ -72,7 +72,7 @@
                     "contentVersion":"1.0.0.0"
                 } ,
                 "parameters": {
-                    "password": {
+                    "adminpassword": {
                         "value": "[parameters('vmpass')]"
                     },
                     "vmsconfig": {
