@@ -76,7 +76,7 @@
                         "value": "[parameters('vmpass')]"
                     },
                     "vmsconfig": {
-                        "value" : [{
+                        "value" : {
                             "vmPrefix": "[variables('VMConfig').vmPrefix]",  
                             "VNetName": "[variables('VMConfig').VNetName]", 
                             "VmCount" : "[variables('VMConfig').VmCount]" , 
