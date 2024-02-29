@@ -19,6 +19,10 @@
         "Bastion": {
           "type": "bool",
           "defaultValue": true
+        },
+        "NSG": {
+          "type": "string",
+          "defaultValue": "NSG_NoOutboundInternet"
         }
     },
     "variables": {
@@ -42,7 +46,11 @@
                     "input" : {
                         "name": "[format('Subnet{0}',copyindex('subnets'))]",
                         "properties": {
-                          "addressPrefix": "[format(variables('addressPrefix'),copyindex('subnets'))]"
+                          "addressPrefix": "[format(variables('addressPrefix'),copyindex('subnets'))]" ,
+                          "networksecuritygroup": {
+                            "id":  "[resourceId('Microsoft.Network/networkSecurityGroups',parameters('NSG'))]"
+                          }
+                          
                         }
                       }
                     }
@@ -77,8 +85,8 @@
         "value":  "[variables('addressPrefixes')]"
       },
       "NSG": {
-        "type": "object",
-        "value" : "[if(variables('isNoNSG'),json('null'),variables('RealNSG'))]"
+        "type": "string",
+        "value" : "[resourceId('Microsoft.Network/networkSecurityGroups',parameters('NSG'))]"
       }
     }
 }
