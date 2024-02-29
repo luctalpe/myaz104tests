@@ -10,8 +10,7 @@
             "defaultValue" :  "https://raw.githubusercontent.com/luctalpe/myaz104tests/main/" 
         },
         "vmpass": {
-            "type": "securestring",
-            "defaultValue": "sqqsdqqD85&£ç9-"
+            "type": "securestring"
         }
     },
     "functions": [],

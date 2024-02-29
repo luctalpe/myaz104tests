@@ -1,0 +1,35 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "github": {
+            "type": "string",
+            "defaultValue": "https://raw.githubusercontent.com/luctalpe/myaz104tests/main/"
+        }
+    },
+    "functions": [],
+    "variables": {
+        "githubpath" : "[parameters('github')]" ,
+        "privatednspath" : "[concat( variables('githubpath') , 'PrivateDNS.json')]"
+
+    },
+    "resources": [
+        {
+            "name": "PrivateDns",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2022-09-01",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri":"[variables('privatednspath')]",
+                    "contentVersion":"1.0.0.0"
+                } ,
+                "parameters": {
+                    "DNSZone": "luct.fr",
+                    "VNets": [ "VHub", "VNet0", "VNet1"]
+                }
+            }
+        }
+    ],
+    "outputs": {}
+}
