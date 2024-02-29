@@ -26,7 +26,8 @@
                 } ,
                 "parameters": {
                     "VNets":  { 
-                        "value: " : ["VHub", "VNet0", "VNet1"] 
+                        
+                        "value: " :  ["VHub", "VNet0", "VNet1"] 
                     },
                     "DNSZone": {
                         "value":  "luct.fr"

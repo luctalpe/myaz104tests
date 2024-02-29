@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "DNSZone": {
-            "type": "string",
+            "type": "string"
         },
         "VNets": {
-            "type": "array",     
+            "type": "array"    
         }
     },
     "functions": [],
