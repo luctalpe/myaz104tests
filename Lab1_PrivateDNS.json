@@ -26,7 +26,7 @@
                 } ,
                 "parameters": {
                     "DNSZone": {
-                        "value":  "luct.fr"
+                        "value":  "azure.luct.fr"
                     }
 
                 }
