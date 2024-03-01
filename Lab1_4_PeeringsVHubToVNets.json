@@ -36,7 +36,7 @@
                         "value":  "VHub"
                     },
                     "destination": {
-                        "value":  "[format('Vnet1{0}',copyIndex())]"
+                        "value":  "[format('Vnet{0}',copyIndex())]"
                     }
                 }
             }
@@ -57,7 +57,7 @@
                 } ,
                 "parameters" : {
                     "source": {
-                        "value":  "[format('Vnet1{0}',copyIndex())]"
+                        "value":  "[format('Vnet{0}',copyIndex())]"
                     },
                     "destination": {
                         "value":  "VHub"
