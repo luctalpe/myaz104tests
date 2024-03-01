@@ -37,7 +37,9 @@
             "location": "[resourceGroup().location]",
             "copy": {
                 "name": "netIntCopy",
-                "count": "[parameters('vmsconfig').VmCount]"
+                "count": "[parameters('vmsconfig').VmCount]",
+                "mode": "Serial",
+                "batchSize" : 1
             },
             "properties": {
                 "ipConfigurations": [
@@ -61,6 +63,8 @@
             "copy": {
                 "name": "vmCopy",
                 "count": "[parameters('vmsconfig').VmCount]",
+                "mode": "Serial" , 
+                "batchSize" : 1
             },
             "dependsOn" : [ "[concat(format('Microsoft.Network/networkInterfaces/{0}{1}{2}{3}', parameters('vmsconfig').vmPrefix, copyIndex(),parameters('vmsconfig').VNetName,parameters('vmsconfig').SubnetName), 'NetInt')]" ],
             "properties": {
