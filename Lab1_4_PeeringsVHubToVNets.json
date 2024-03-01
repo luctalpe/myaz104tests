@@ -1,0 +1,71 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "github": {
+            "type": "string",
+            "metadata": {
+                "description": "description"
+            },
+            "defaultValue" :  "https://raw.githubusercontent.com/luctalpe/myaz104tests/main/" 
+        }
+    },
+    "functions": [],
+    "variables": {
+        "githubpath" : "[parameters('github')]" ,
+        "peeringpath" : "[concat( variables('githubpath') , 'VNetPeering.json')]",
+
+    },
+    "resources": [
+        {
+            "copy": {
+                "name": "VHubTo",
+                "count": 2
+            },
+            "name": "[format('VHubToVNet{0}Peering',copyIndex())]",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2022-09-01",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri":"[variables('peeringpath')]",
+                    "contentVersion":"1.0.0.0"
+                } ,
+                "parameters" : {
+                    "source": {
+                        "value":  "VHub"
+                    },
+                    "destination": {
+                        "value":  "[format('Vnet1{0}',copyIndex())]"
+                    }
+                }
+            }
+        } ,
+        {
+            "copy": {
+                "name": "VNetTo",
+                "count": 2
+            },
+            "name": "[format('VNet{0}ToVHubPeering',copyIndex())]",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2022-09-01",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri":"[variables('peeringpath')]",
+                    "contentVersion":"1.0.0.0"
+                } ,
+                "parameters" : {
+                    "source": {
+                        "value":  "[format('Vnet1{0}',copyIndex())]"
+                    },
+                    "destination": {
+                        "value":  "VHub"
+                    }
+                }
+            }
+        }
+        
+    ],
+    "outputs": {}
+}
