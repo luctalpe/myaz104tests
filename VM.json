@@ -13,7 +13,7 @@
                 "VNetName": "VNet1",
                 "VmCount" : 1 ,
                 "SubnetName": "Subnet1" ,
-                "enableIPForwarding": false
+                "enableIPForwarding": "false"
 
             }
         },
@@ -25,7 +25,6 @@
         }
 
     },
-
     "variables" : {
         "adminUsername":  "luct"
         },
@@ -41,7 +40,7 @@
                 "count": "[parameters('vmsconfig').VmCount]"
             },
             "properties": {
-                "enableIPForwarding" : "[parameters('vmsconfig').enableIPForwarding]", 
+                "enableIPForwarding" : "[equals(parameters('vmsconfig').enableIPForwarding,'true')]", 
                 "ipConfigurations": [
                     {
                         "name": "ipconfig1",

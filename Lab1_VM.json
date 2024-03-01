@@ -15,10 +15,10 @@
         "githubpath" : "[parameters('github')]" ,
         "vmpath" : "[concat( variables('githubpath') , 'VM.json')]",
         "VMSConfig" : [
-            { "vmPrefix": "VM",  "VNetName": "VNet0", "VmCount" : 2 , "SubnetName": "Subnet0" , "enableIPForwarding"  : false },
-            { "vmPrefix": "VM",  "VNetName": "VNet0", "VmCount" : 1 , "SubnetName": "Subnet1" , "enableIPForwarding"  : false },
-            { "vmPrefix": "VM",  "VNetName": "VNet1", "VmCount" : 1 , "SubnetName": "Subnet0" , "enableIPForwarding"  : false },
-            { "vmPrefix": "VM",  "VNetName": "VHub", "VmCount" : 1 , "SubnetName": "Subnet0"  , "enableIPForwarding"  : true  }
+            { "vmPrefix": "VM",  "VNetName": "VNet0", "VmCount" : 2 , "SubnetName": "Subnet0" , "enableIPForwarding"  : "false" },
+            { "vmPrefix": "VM",  "VNetName": "VNet0", "VmCount" : 1 , "SubnetName": "Subnet1" , "enableIPForwarding"  : "false" },
+            { "vmPrefix": "VM",  "VNetName": "VNet1", "VmCount" : 1 , "SubnetName": "Subnet0" , "enableIPForwarding"  : "false" },
+            { "vmPrefix": "VM",  "VNetName": "VHub", "VmCount" : 1 , "SubnetName": "Subnet0"  , "enableIPForwarding"  : "true"  }
         ]
     },
     "resources": [
@@ -44,7 +44,8 @@
                             "VNetName": "[variables('VMSConfig')[copyIndex()].VNetName]", 
                             "VmCount" : "[variables('VMSConfig')[copyIndex()].VmCount]" , 
                             "SubnetName": "[variables('VMSConfig')[copyIndex()].SubnetName]"  ,
-                            "enableIPForwarding": "[variables('VMSConfig')[copyIndex()].enableIPForwarding]"   
+                            "enableIPForwarding": "[variables('VMSConfig')[copyIndex()].enableIPForwarding]"
+                             
                         }
                     },
                     "adminPassword": {
