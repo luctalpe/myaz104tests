@@ -13,7 +13,7 @@
     "functions": [],
     "variables": {
         "githubpath" : "[parameters('github')]" ,
-        "nofwpath" : "[concat( variables('githubpath') , 'DisableVMFirewall.bicep')]",
+        "nofwpath" : "[concat( variables('githubpath') , 'DisableVMFirewall.json')]",
         "vms" : [ "VM0VHubSubnet0",
                     "VM0VNet0Subnet0",
                     "VM0VNet0Subnet1",

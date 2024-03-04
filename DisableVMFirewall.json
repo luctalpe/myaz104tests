@@ -1,0 +1,27 @@
+
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "vmname": {
+      "type": "string",
+      "defaultValue" : "VM0VNet0Subnet0"
+    }
+  },
+  "functions": [],
+  "variables": {},
+  "resources": [
+    {
+      "type": "Microsoft.Compute/virtualMachines/runCommands",
+      "apiVersion" : "2023-03-01",
+      "name": "[concat(parameters('vmName'), '/myCommand')]",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "source": {
+          "script": "netsh advfirewall set allprofiles state off"
+        }
+      }
+     }
+  ],
+  "outputs": {}
+}
