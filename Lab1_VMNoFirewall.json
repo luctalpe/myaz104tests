@@ -1,0 +1,52 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "github": {
+            "type": "string",
+            "metadata": {
+                "description": "description"
+            },
+            "defaultValue" :  "https://raw.githubusercontent.com/luctalpe/myaz104tests/main/" 
+        }
+    },
+    "functions": [],
+    "variables": {
+        "githubpath" : "[parameters('github')]" ,
+        "nofwpath" : "[concat( variables('githubpath') , 'DisableVMFirewall.bicep')]",
+        "vms" : [ "VM0VHubSubnet0",
+                    "VM0VNet0Subnet0",
+                    "VM0VNet0Subnet1",
+                    "VM0VNet1Subnet0",
+                    "VM1VNet0Subnet0"
+                ]
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Resources/deployments" ,
+            "apiVersion": "2022-09-01",
+            "copy": {
+                "name": "vmscopy",
+                "count": "[length(variables('vms'))]"
+
+            }, 
+            "name": "[format( 'NoFirewall_{0}', variables('vms')[copyIndex()] )]",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('nofwpath')]",
+                    "contentVersion": "1.0.0.0"
+                    
+                },
+                "parameters": {
+
+                    "vm": {
+                        "value": "[variables('vms')[copyIndex()]]" 
+                    }
+                }
+                
+            }
+        }
+    ],
+    "outputs": {}
+}
