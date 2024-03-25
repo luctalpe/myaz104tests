@@ -40,7 +40,7 @@
                 },
                 "parameters": {
 
-                    "vm": {
+                    "vmname": {
                         "value": "[variables('vms')[copyIndex()]]" 
                     }
                 }

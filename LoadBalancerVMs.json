@@ -1,0 +1,150 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "loadBalancers_MyVMsLB_name": {
+            "defaultValue": "MyVMsLB",
+            "type": "String"
+        },
+        "virtualNetworks_VNetA_externalid": {
+            "defaultValue": "/subscriptions/ad62fd9a-3fe8-4655-b573-d683ffcfc25e/resourceGroups/RG/providers/Microsoft.Network/virtualNetworks/VNetA",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Network/loadBalancers",
+            "apiVersion": "2023-09-01",
+            "name": "[parameters('loadBalancers_MyVMsLB_name')]",
+            "location": "westus",
+            "tags": {
+                "Tag4": "value4"
+            },
+            "sku": {
+                "name": "Standard",
+                "tier": "Regional"
+            },
+            "properties": {
+                "frontendIPConfigurations": [
+                    {
+                        "name": "FEIP",
+                        "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancers_MyVMsLB_name')), '/frontendIPConfigurations/FEIP')]",
+                        "properties": {
+                            "privateIPAddress": "10.10.1.9",
+                            "privateIPAllocationMethod": "Static",
+                            "subnet": {
+                                "id": "[concat(parameters('virtualNetworks_VNetA_externalid'), '/subnets/SubnetA1')]"
+                            },
+                            "privateIPAddressVersion": "IPv4"
+                        }
+                    }
+                ],
+                "backendAddressPools": [
+                    {
+                        "name": "VMsVnetA",
+                        "id": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', parameters('loadBalancers_MyVMsLB_name'), 'VMsVnetA')]",
+                        "properties": {
+                            "loadBalancerBackendAddresses": [
+                                {
+                                    "name": "31f839f5-1960-4b4f-828a-8f7e31a608c6",
+                                    "properties": {
+                                        "ipAddress": "10.10.1.4",
+                                        "virtualNetwork": {
+                                            "id": "[parameters('virtualNetworks_VNetA_externalid')]"
+                                        }
+                                    }
+                                },
+                                {
+                                    "name": "ebb4724d-aea1-4f61-bed3-f0edeb0d7761",
+                                    "properties": {
+                                        "ipAddress": "10.10.2.4",
+                                        "virtualNetwork": {
+                                            "id": "[parameters('virtualNetworks_VNetA_externalid')]"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "loadBalancingRules": [
+                    {
+                        "name": "RDP",
+                        "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancers_MyVMsLB_name')), '/loadBalancingRules/RDP')]",
+                        "properties": {
+                            "frontendIPConfiguration": {
+                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancers_MyVMsLB_name')), '/frontendIPConfigurations/FEIP')]"
+                            },
+                            "frontendPort": 3389,
+                            "backendPort": 3389,
+                            "enableFloatingIP": false,
+                            "idleTimeoutInMinutes": 4,
+                            "protocol": "Tcp",
+                            "enableTcpReset": false,
+                            "loadDistribution": "Default",
+                            "disableOutboundSnat": true,
+                            "backendAddressPool": {
+                                "id": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', parameters('loadBalancers_MyVMsLB_name'), 'VMsVnetA')]"
+                            },
+                            "backendAddressPools": [
+                                {
+                                    "id": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', parameters('loadBalancers_MyVMsLB_name'), 'VMsVnetA')]"
+                                }
+                            ],
+                            "probe": {
+                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancers_MyVMsLB_name')), '/probes/RDPProbe')]"
+                            }
+                        }
+                    }
+                ],
+                "probes": [
+                    {
+                        "name": "RDPProbe",
+                        "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancers_MyVMsLB_name')), '/probes/RDPProbe')]",
+                        "properties": {
+                            "protocol": "Tcp",
+                            "port": 3389,
+                            "intervalInSeconds": 20,
+                            "numberOfProbes": 1,
+                            "probeThreshold": 1
+                        }
+                    }
+                ],
+                "inboundNatRules": [],
+                "outboundRules": [],
+                "inboundNatPools": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/loadBalancers/backendAddressPools",
+            "apiVersion": "2023-09-01",
+            "name": "[concat(parameters('loadBalancers_MyVMsLB_name'), '/VMsVnetA')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancers_MyVMsLB_name'))]"
+            ],
+            "properties": {
+                "loadBalancerBackendAddresses": [
+                    {
+                        "name": "31f839f5-1960-4b4f-828a-8f7e31a608c6",
+                        "properties": {
+                            "ipAddress": "10.10.1.4",
+                            "virtualNetwork": {
+                                "id": "[parameters('virtualNetworks_VNetA_externalid')]"
+                            }
+                        }
+                    },
+                    {
+                        "name": "ebb4724d-aea1-4f61-bed3-f0edeb0d7761",
+                        "properties": {
+                            "ipAddress": "10.10.2.4",
+                            "virtualNetwork": {
+                                "id": "[parameters('virtualNetworks_VNetA_externalid')]"
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}

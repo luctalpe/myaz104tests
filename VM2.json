@@ -1,0 +1,104 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "VMname": {
+            "type": "string",
+            "defaultValue" : "VM"
+            
+        },
+        "VNetName": {
+            "type": "string",
+            "defaultValue" : "VNet"
+        },
+        "EnabledIpForwarding": {
+            "type": "bool",
+            "defaultValue": false
+        },
+        "SubnetName": {
+            "type": "string",
+            "defaultValue": "Subnet"
+        }, 
+        
+        "adminPassword" : {
+            "type" : "securestring"
+
+        },
+        "RunScript": {
+            "type" : "string",
+            "defaultValue" : "not implemented"
+        }
+
+    },
+    "variables" : {
+        "adminUsername":  "luct"
+        },
+
+   "resources": [
+        {
+            "type": "Microsoft.Network/networkInterfaces",
+            "apiVersion": "2021-02-01",
+            "name": "[concat( parameters('VMname'), 'NetInt')]",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "enableIPForwarding" : "[equals(parameters('EnabledIpForwarding'),true())]", 
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "properties": {
+                            "privateIPAllocationMethod": "Dynamic",
+                            "subnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('VNetName'), parameters('SubnetName'))]"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines",
+            "apiVersion": "2021-07-01",
+            "name": "[parameters('VMname')]",
+            "location": "[resourceGroup().location]",
+            "dependsOn" : ["[format('Microsoft.Network/networkInterfaces/{0}NetInt', parameters('VMname'))]" ], 
+ 
+ 
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "Standard_DS1_v2"
+                },
+                "osProfile": {
+                    "computerName":  "[parameters('VMname')]",
+                    "adminUsername": "[variables('adminUsername')]",
+                    "adminPassword": "[parameters('adminPassword')]"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "MicrosoftWindowsServer",
+                        "offer": "WindowsServer",
+                        "sku": "2019-Datacenter",
+                        "version": "latest"
+                    }
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', concat( parameters('VMname'), 'NetInt'))]"
+                        }
+                    ]
+                }
+            }
+        }
+    ],
+    "outputs": {
+        "vm": {
+            "type": "object",
+            "value": "[reference(parameters('VMname'))]"
+        },
+        "nic": {
+            "type": "object",
+            "value": "[reference(concat( parameters('VMname'), 'NetInt'))]" 
+        }
+    }
+}
+

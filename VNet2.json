@@ -20,33 +20,81 @@
           "type": "bool",
           "defaultValue": true
         },
+        "SubnetCount": {
+          "type": "int",
+          "defaultValue": 2 
+        },
+        "SubNetName": {
+          "type": "string", 
+          "defaultValue": "A"
+        },
+        "RouteTables": {
+          "type": "bool",
+          "defaultValue": false
+        },
         "StorageEndpoints": {
           "type": "bool",
           "defaultValue": false
         }
+
+	
     },
     "variables": {
       "addressPrefixes" : "[concat(parameters('Prefix'),'0.0')]" ,
-      "addressPrefix" :"[concat(parameters('Prefix'),'{0}.0/24')]" 
+      "addressPrefix" :"[concat(parameters('Prefix'),'{0}.0/24')]" ,
+      "RouteTablePrefix": "[format('RT{0}{1}',parameters('VName'),parameters('SubNetName'))]"
+ 
     },
     "resources":  [
+      {
+            "type": "Microsoft.Network/virtualNetworks",
+            "apiVersion": "2020-06-01",
+            "name": "[parameters('VName')]",
+            "location": "[resourceGroup().location]",
+            "condition": "[parameters('RouteTables')]", 
+            
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [ "[concat(variables('addressPrefixes'),'/16')]" ]
+                },
+                "copy" : [
+                  {
+                    "name" : "subnets",
+                    "count" : "[parameters('SubnetCount')]" ,
+                    "input" : {
+                        "name": "[format('{0}{1}',parameters('SubNetName'), add( copyindex('subnets'),1))]",
+                        "properties": {
+                          "addressPrefix": "[format(variables('addressPrefix'),add( copyindex('subnets'),1))]",
+                          "routetable": {
+                              "id": "[resourceId('Microsoft.Network/routeTables', format('RT{0}{1}{2}',parameters('VName'),parameters('SubNetName'),add( copyindex('subnets'),1))) ]"
+                          }
+                          
+                        }
+                      }
+                    }
+                  ]
+                
+            }
+        } ,
         {
             "type": "Microsoft.Network/virtualNetworks",
             "apiVersion": "2020-06-01",
             "name": "[parameters('VName')]",
             "location": "[resourceGroup().location]",
+            "condition": "[equals(parameters('RouteTables'),false())]", 
+            
             "properties": {
                 "addressSpace": {
-                    "addressPrefixes": [ "[concat(variables('addressPrefixes'),'/20')]" ]
+                    "addressPrefixes": [ "[concat(variables('addressPrefixes'),'/16')]" ]
                 },
                 "copy" : [
                   {
                     "name" : "subnets",
-                    "count" : 2 ,
+                    "count" : "[parameters('SubnetCount')]" ,
                     "input" : {
-                        "name": "[format('Subnet{0}',copyindex('subnets'))]",
+                        "name": "[format('{0}{1}',parameters('SubNetName'), add( copyindex('subnets'),1))]",
                         "properties": {
-                          "addressPrefix": "[format(variables('addressPrefix'),copyindex('subnets'))]"
+                          "addressPrefix": "[format(variables('addressPrefix'),add( copyindex('subnets'),1))]"
                         }
                       }
                     }
