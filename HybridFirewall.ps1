@@ -9,11 +9,11 @@ $SharedKey = 'Thi67qsis_56!AWb23'
 #   - Subnets : Firewall , Gateway
 #   - Public Ip for gw
 #
-$VNetnameHub = "Hub"Y
+$VNetnameHub = "Hub"
 $SNnameHub = "AzureFirewallSubnet"
 $SNnameGW = "GatewaySubnet"
 $GWHubpipName = "Hub-GW-pip"
-$GWHubName = "GW-hub"*
+$GWHubName = "GW-hub"
 $GWIPconfNameHub = "GW-ipconf-hub"
 
 
