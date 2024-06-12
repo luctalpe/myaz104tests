@@ -1,0 +1,2 @@
+$high100cpu =  '$in100s = [datetime]::now + $(new-timespan -second 100 ) ;  while ( [datetime]::now -lt $in100s ) { }'
+Invoke-AzVMRunCommand -ResourceGroupName RG  -VMName NVA -CommandId "RunPowershellScript" -ScriptString $high100cpu
